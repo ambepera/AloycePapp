@@ -21,10 +21,10 @@ st.set_page_config(page_title="AloyceP Business App",
                    initial_sidebar_state="expanded")
 
 # Images
-Author = Image.open("./Pictures/aloyce.jpg")
-BackImage = Image.open("./Pictures/Background.jpg")
-ProductsImage = Image.open("./Pictures/ProductsImage.jpg")
-TransTypesImage = Image.open("./Pictures/TransactionTypesImage.jpg")
+Author = Image.open("aloyce.jpg")
+BackImage = Image.open("Background.jpg")
+ProductsImage = Image.open(".ProductsImage.jpg")
+TransTypesImage = Image.open(".TransactionTypesImage.jpg")
 
 Now = datetime.now().strftime("%d %B %Y | %a %I : %M %p ")
 Today = date.today()
@@ -50,17 +50,17 @@ def Horizontal_Line():
 NestoryBusiness = Business("Nestory")
 
 # Create Transaction Tables
-# NestoryBusiness.TransactionTable()
-# NestoryBusiness.OtherTransactionTable(tablename="SalesTable")
-# NestoryBusiness.OtherTransactionTable(tablename="StocksTable")
-#NestoryBusiness.OtherTransactionTable(tablename="COGSTable")
-# NestoryBusiness.CreateAccount("ReceivablesAccount")
-# NestoryBusiness.CreateAccount("PayablesAccount")
-# NestoryBusiness.CreateAccount("CashAccount")
+NestoryBusiness.TransactionTable()
+NestoryBusiness.OtherTransactionTable(tablename="SalesTable")
+NestoryBusiness.OtherTransactionTable(tablename="StocksTable")
+NestoryBusiness.OtherTransactionTable(tablename="COGSTable")
+NestoryBusiness.CreateAccount("ReceivablesAccount")
+NestoryBusiness.CreateAccount("PayablesAccount")
+NestoryBusiness.CreateAccount("CashAccount")
 
-# NestoryBusiness.ProductTable()
-# NestoryBusiness.TransactionTypeTable()
-#NestoryBusiness.ExpensesTable()
+NestoryBusiness.ProductTable()
+NestoryBusiness.TransactionTypeTable()
+NestoryBusiness.ExpensesTable()
 
 
 # Top Header
