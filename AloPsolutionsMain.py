@@ -38,16 +38,16 @@ def DeleteTable(tablename):
 # DeleteTable("SalesTable")
 # DeleteTable("ClosingStockBalTable")
 
-# DeleteAllData("TransactTable")
-# DeleteAllData("StocksTable")
-# DeleteAllData("SalesTable")
-# DeleteAllData("COGSTable")
-# DeleteAllData("ReceivablesAccount")
-# DeleteAllData("CashAccount")
-# DeleteAllData("PayablesAccount")
+DeleteAllData("TransactTable")
+DeleteAllData("StocksTable")
+DeleteAllData("SalesTable")
+DeleteAllData("COGSTable")
+DeleteAllData("ReceivablesAccount")
+DeleteAllData("CashAccount")
+DeleteAllData("PayablesAccount")
 
-# DeleteAllData("ClosingStockBalTable")
-# DeleteAllData("ExpensesTable")
+DeleteAllData("ClosingStockBalTable")
+DeleteAllData("ExpensesTable")
 
 
 # Main Business Class
