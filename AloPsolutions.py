@@ -1,8 +1,8 @@
 import sqlite3
 import pandas as pd
 import streamlit as st 
-# from streamlit import streamlit_option_menu
-# from streamlit_option_menu import option_menu
+from streamlit_option_menu import option_menu
+import streamlit.components.v1 as html
 import random
 import datetime
 from datetime import datetime
