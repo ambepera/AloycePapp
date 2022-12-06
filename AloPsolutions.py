@@ -25,7 +25,7 @@ st.set_page_config(page_title="AloyceP Business App",
 Author = Image.open("aloyce.jpg")
 BackImage = Image.open("Background.jpg")
 ProductsImage = Image.open("ProductsImage.jpg")
-TransTypesImage = Image.open("TransactionTypesImage.jpg")
+TransTypesImage = Image.open("TransactionTypesImage.JPG")
 
 Now = datetime.now().strftime("%d %B %Y | %a %I : %M %p ")
 Today = date.today()
