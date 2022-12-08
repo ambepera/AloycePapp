@@ -6,7 +6,7 @@ import streamlit.components.v1 as html
 import random
 import datetime
 from datetime import datetime
-from AloPsolutionsMain import (Business,TransactionInputForm,ProductEditForm,AddTransactionTypeForm,View_Profit_Loss,View_StocksReports,
+from nestorysql import (Business,TransactionInputForm,ProductEditForm,AddTransactionTypeForm,View_Profit_Loss,View_StocksReports,FinancialStatement,
                         TransactionEditForm,TransactionDeleteForm,ProductDeleteForm,EditTransactionTypeForm,SettlingPayableForm,
                         DeleteTransactionTypeForm,AddProductForm,AddExpensesForm,DeleteExpensesForm,ReceivablesColloectionForm)
 from datetime import datetime,timedelta,date
