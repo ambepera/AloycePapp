@@ -158,13 +158,20 @@ class Business():
         COGS = cur.execute('''SELECT SUM(TotalValue) FROM COGSTable
                                             WHERE ([TranasctionDate] between  ? and  ?)
                                             ''',(sd,ed)).fetchall()[0][0]
-        return COGS
+        if COGS is None:
+            return 0
+        else:
+            return COGS
+
     # Method to calculate SUM of Operating Expenses based on SD & ED
     def Sum_OperatingExp_Val(self,sd,ed):
-        COGS = cur.execute('''SELECT SUM(ExpenseAmount) FROM ExpensesTable
+        Exp = cur.execute('''SELECT SUM(ExpenseAmount) FROM ExpensesTable
                                             WHERE ([TransactionDate] between  ? and  ?) and (ExpenseCategory = "Operating Expenses")
                                             ''',(sd,ed)).fetchall()[0][0]
-        return COGS
+        if Exp is None:
+            return 0
+        else:
+            return Exp
     
     # Method to Select ID with the Recent Date from Given Table
     def Select_ID(self,colID,tablename,datecol,prnacol,prname):
@@ -201,8 +208,10 @@ class Business():
                                             WHERE ([ActionType] in ("Cash Sale","Credit Sale")) and 
                                             ([TranasctionDate] between  ? and  ?)
                                             ''',(sd,ed)).fetchall()[0][0]
-                sum = abs(sales)
-                return sum
+                if sales is None:
+                    return 0
+                else:
+                    return abs(sales)
             except TypeError: 
                 pass
             
@@ -212,7 +221,10 @@ class Business():
                                             WHERE ([ActionType] in ("Cash Purchase","Credit Purchase")) and 
                                             ([TranasctionDate] between  ? and  ?)
                                             ''',(sd,ed)).fetchall()[0][0]
-                return sum
+                if sum is None:
+                    return 0
+                else:
+                    return sum
             except TypeError:
                 pass
 
@@ -360,11 +372,21 @@ def StoreClosingStock():
 
 # Method to select a closing stock of a day
 def DailyClosingStock(closingdate):
-        Date = cur.execute('''SELECT ClosingBalance FROM ClosingStockBalTable 
+        Cl_Bal = cur.execute('''SELECT ClosingBalance FROM ClosingStockBalTable 
                               WHERE SystemTransDate = (SELECT MAX(SystemTransDate) FROM ClosingStockBalTable WHERE TranasctionDate = ? ) 
                               ''',(closingdate,)).fetchall()
-        return Date
+        return Cl_Bal
 
+
+# Method to select a Account Balance of a day
+def DailyAccountBalance(accountname,closingdate):
+        Cl_Bal = cur.execute('''SELECT BookBalance FROM "{}" 
+                                 WHERE SystemTransactDate = (SELECT MAX(SystemTransactDate) FROM "{}" WHERE TranasctionDate = "{}" ) 
+                              '''.format(accountname,accountname,closingdate)).fetchall()
+        return Cl_Bal
+
+# (ID SERIAL,TranasctionDate date, TransactionDetails TEXT(500), DebtAmount money, CreditAmount money,
+            #  BookBalance money,CustomerSupplierName TEXT(50), SystemTransactDate date)
 
 #================================================================================================================================
 # check if the Cash Account has Balance
@@ -1271,7 +1293,7 @@ def SettlingPayableForm():
                             ID = str(datetime.today()) + "_" + str(random.randint(10,100000))
                             PayCash_Record(Value=TotalValue,id=ID)
                             UpdatePayable_Repayment()
-                            st.success(f'''Congratulations! You have successful Payed {TotalValue:,.0f} to {SelCreditor[0]}
+                            st.success(f'''Congratulations! You have successful Paid {TotalValue:,.0f} to {SelCreditor[0]}
                                             The Remaining Balance is {CreditorOutstandingBal(SelCreditor[0]):,.0f}.''')
                             # Re-update Balance after recording the recovered amount
                             creditorBal = CreditorOutstandingBal(SelCreditor[0])
@@ -1350,7 +1372,7 @@ ClosingStockBalTable()
 # Function to get the closing stock as per selected Reporting Start Date
 def LatestClosingStock(date):
     ClosingStock = []
-    PossibleDates = range(1,5000)
+    PossibleDates = range(0,2000)
     for PreDate in PossibleDates:
         if len(ClosingStock) > 0:
             break
@@ -1385,15 +1407,15 @@ def View_Profit_Loss():
         metr1,metr2,metr3 = st.columns([1,1,1])
 
         if len(StocksBal) > 0:
+
             sd = sd.date_input(label="Start Date",value=default_date_PY)
             ed = ed.date_input("End Date")
 
             # get Ending Stock as per Ed
-            StockDate = ed + timedelta(days=1)
-            TotalClosingStock = LatestClosingStock(date=StockDate)
+            TotalClosingStock = LatestClosingStock(date=ed)
             # TotalClosingStock = Business.Sum_ClosingBal_Val(Business)
 
-            TotalSales = Business.Sum_Amount(Business,"Sale",sd,ed)
+            TotalSales = Business.Sum_Amount(self=Business,Sale_Purchase="Sale",sd=sd,ed=ed)
             TotalPurchases = Business.Sum_Amount(Business,"Purchase",sd,ed)
             TotalCOGS = Business.Sum_CostSales_Val(Business,sd,ed)
             TotalOperatingExp = Business.Sum_OperatingExp_Val(Business,sd,ed)
@@ -1406,6 +1428,7 @@ def View_Profit_Loss():
                     else:
                         return f"Loss: Tshs.{abs(TotalProfit):,.0f}"
 
+            # and (ActionType in ("Cash Sale","Credit Sale")
             if TotalSales and TotalCOGS:
                 
                 metr1.metric(label="Total Sales",value=f"Tshs.{get_display(TotalSales):,.0f}")
@@ -1436,7 +1459,8 @@ def View_Profit_Loss():
                 st.markdown('''***Cost of Goods Sold***''')
                 fistempt,descr,descr_value,lastempt = st.columns([1,3.2,0.8,0.8])
                 
-                OpenStock = LatestClosingStock(date=sd)
+                val_sd = sd - timedelta(days=1)
+                OpenStock = LatestClosingStock(date=val_sd)
                 descr.info("Opening Stock")
                 descr.info("Purchases")
                 descr_value.warning(f"{get_display(val=OpenStock):,.0f}")
@@ -1472,7 +1496,7 @@ def View_Profit_Loss():
                                 return f"{NetProfit:,.0f}"
                             else:
                                 return f"({abs(NetProfit):,.0f})"
-                    #------------------------------------------------
+                    #--------------------------------------------------------------
                     def net_desc(TotalSales,TotalCOGS,TotalOperatingExp):
                         if TotalProfit is None or TotalOperatingExp is None:
                             return ""
@@ -1491,4 +1515,70 @@ def View_Profit_Loss():
         else:
             st.info("Currently, There is no transactions to Report!")
 
+# Financial Statement
 
+# Function to get the closing Balance of an Account as per selected Reporting Start Date
+def LatestClosingAccountBal(accname, date):
+    ClosingBal = []
+    PossibleDates = range(0,2000)
+    for PreDate in PossibleDates:
+        if len(ClosingBal) > 0:
+            break
+        try:
+            ClosingBal = DailyAccountBalance(accountname=accname,closingdate=date - timedelta(days=PreDate))
+            return ClosingBal[0][0]         
+        except IndexError:
+            continue
+
+def AccountClosingBalance(accname, date):
+    Bal = LatestClosingAccountBal(accname, date)
+    if Bal is None:
+        return 0
+    else:
+        return Bal
+
+def EndingStockBal(ed):
+    Bal = LatestClosingStock(date=ed)
+    if Bal is None:
+        return 0
+    else:
+        return Bal
+
+def FinancialStatement():
+
+    space,end = st.columns([2,1])
+
+
+    ed = end.date_input("When You Want To See A Financial Position of The Business!")
+
+    # Statement of Financial Position
+    st.markdown('''<p class="PL_MainHeader">NESTORY'S BUSINESS</p>''',unsafe_allow_html=True)
+    st.markdown('''<p class="PL_SecondHeader">Statement of Financial Positions</p>''',unsafe_allow_html=True)
+    st.markdown(f'''<p class="PL_ThirdHeader">As at {ed.strftime("%d %B %Y")}</p>''',unsafe_allow_html=True)            
+    Cash_balance = AccountClosingBalance(accname="CashAccount",date=ed)
+    Receivable_balance = AccountClosingBalance(accname="ReceivablesAccount",date=ed)
+    Payable_balance = AccountClosingBalance(accname="PayablesAccount",date=ed)
+    
+    
+    
+    # Current Assets
+    st.markdown("*CURRENT ASSETS*")
+    info_CA,vals_CA = st.columns([1,1])
+
+    info_CA.info("***Cash & Cash Equivalents***")
+    vals_CA.success(f"**{Cash_balance:,.0f}**")
+
+    info_CA.info("***Account Receivables***")
+    vals_CA.success(f"**{Receivable_balance:,.0f}**")
+    
+    info_CA.info("***Ending Stock***")
+    vals_CA.success(f"**{EndingStockBal(ed):,.0f}**")
+    
+    # Current Liabilities
+    
+    st.markdown("*CURRENT LIABILITIES*")
+    info_CL,vals_CL = st.columns([1,1])
+    info_CL.info("***Account Payables & Accrued Expenses***")
+    vals_CL.success(f"**{Payable_balance:,.0f}**")
+    
+    
