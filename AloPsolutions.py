@@ -73,7 +73,7 @@ dat.info(f"{Now}")
     
 # Main Nav Bar
 with st.sidebar:
-    choice = option_menu(menu_title="Main Menu",menu_icon="",
+    choice = option_menu(menu_title="",menu_icon="",
               options=["Home","Stocking & Selling","Business Expenses","Receivables & Payables",
                         "Manage Products","Manage Transactions","Reporting & Analytics"],
                icons=["bookmarks","bi bi-bookmarks-fill","bi bi-briefcase-fill","bi bi-credit-card-fill",
