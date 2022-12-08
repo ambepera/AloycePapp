@@ -51,7 +51,7 @@ def Horizontal_Line():
 NestoryBusiness = Business("Nestory")
 
 # Create Transaction Tables
-NestoryBusiness.TransactionTable()
+# NestoryBusiness.TransactionTable()
 # NestoryBusiness.OtherTransactionTable(tablename="SalesTable")
 # NestoryBusiness.OtherTransactionTable(tablename="StocksTable")
 # NestoryBusiness.OtherTransactionTable(tablename="COGSTable")
