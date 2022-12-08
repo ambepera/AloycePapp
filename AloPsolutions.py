@@ -51,7 +51,7 @@ def Horizontal_Line():
 NestoryBusiness = Business("Nestory")
 
 # Create Transaction Tables
-# NestoryBusiness.TransactionTable()
+NestoryBusiness.TransactionTable()
 # NestoryBusiness.OtherTransactionTable(tablename="SalesTable")
 # NestoryBusiness.OtherTransactionTable(tablename="StocksTable")
 # NestoryBusiness.OtherTransactionTable(tablename="COGSTable")
@@ -422,6 +422,9 @@ elif choice == "Reporting & Analytics":
         
         # View Reports
         View_Profit_Loss()
-
+    
+    if choiceReports == "Financial Position":
+        FinancialStatement()
+    
          
     
