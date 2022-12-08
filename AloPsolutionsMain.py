@@ -33,7 +33,7 @@ def DeleteTable(tablename):
         cur.execute('DROP TABLE {}'.format(tablename))
         conn.commit()
 
-# DeleteTable("TransactTable")
+DeleteTable("TransactTable")
 # DeleteTable("StocksTable")
 # DeleteTable("SalesTable")
 # DeleteTable("ClosingStockBalTable")
