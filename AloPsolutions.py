@@ -12,7 +12,9 @@ from AloPsolutionsMain import (Business,TransactionInputForm,ProductEditForm,Add
 from datetime import datetime,timedelta,date
 from PIL import Image
 import io
+import pytz
 
+TzaTimeZone = pytz.timezone('Africa/Dar_es_Salaam')
 
 
 # App Layout
@@ -27,9 +29,9 @@ BackImage = Image.open("Background.jpg")
 ProductsImage = Image.open("ProductsImage.jpg")
 TransTypesImage = Image.open("TransactionTypesImage.JPG")
 
-Now = datetime.now().strftime("%d %B %Y | %a %I : %M %p ")
-Today = date.today()
-now = datetime.now().strftime("%d_%m_%y-%I-%M-%S-%p")
+Now = datetime.now(TzaTimeZone).strftime("%d %B %Y | %a %I : %M %p ")
+Today = date.today(TzaTimeZone)
+now = datetime.now(TzaTimeZone).strftime("%d_%m_%y-%I-%M-%S-%p")
 default_date_PY = Today - timedelta(days=365)
 
 ## Open Stylish file
