@@ -30,7 +30,7 @@ ProductsImage = Image.open("ProductsImage.jpg")
 TransTypesImage = Image.open("TransactionTypesImage.JPG")
 
 Now = datetime.now(TzaTimeZone).strftime("%d %B %Y | %a %I : %M %p ")
-Today = date.today(TzaTimeZone)
+Today = date.today()
 now = datetime.now(TzaTimeZone).strftime("%d_%m_%y-%I-%M-%S-%p")
 default_date_PY = Today - timedelta(days=365)
 
